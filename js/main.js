@@ -293,8 +293,11 @@ function init() {
   var foo = svg.selectAll('path');
   foo.on('click').call(foo[0][0]);
 
-  // XXX
-  advancedcontrols_div.className = '';
+  // optional debug stuff
+  if (window.location.hash === '#debug') {
+    // show advanced controls
+    advancedcontrols_div.className = '';
+  }
 }
 
 // destroy and recreate the color wheel
