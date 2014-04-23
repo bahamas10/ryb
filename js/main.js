@@ -5,6 +5,7 @@ var divisionvariance = 1;
 var isryb = true;
 var lastmasktype = '';
 var margin = 10;
+var maskcolor = 0;
 var mousedown = false;
 var numneutrals = 9;
 var radius = 400;
@@ -24,6 +25,7 @@ var colorpreviewrgb_input;
 var divisions_range;
 var divisionvariance_range;
 var maskcolor_range;
+var maskcolor_range_text;
 var prefix_input;
 var rings_range;
 var ringvariance_range;
@@ -64,6 +66,8 @@ function brightness_range_oninput(t) {
 function divisions_range_oninput(t) {
   divisions = +t.value;
   divisions_range.textContent = divisions;
+  maskcolor_range.max = divisions - 1;
+  maskcolor = Math.min(maskcolor, divisions - 2);
   create();
 }
 
@@ -97,6 +101,14 @@ function toggle_advanced_controls() {
     advancedcontrols_div.className = '';
   else
     advancedcontrols_div.className = 'hidden';
+}
+
+// maskcolor slider
+function maskcolor_range_oninput(t) {
+  maskcolor = +t.value;
+  maskcolor_range_text.innerHTML = maskcolor;
+
+  apply_mask(lastmasktype);
 }
 
 // rotation slider
@@ -150,6 +162,8 @@ function toggle_ryb_rgb_button() {
 function apply_mask(mask) {
   lastmasktype = mask;
 
+  maskcolor_range.disabled = !mask;
+
   svg.selectAll('path')
     .attr('fill', function(d, i) {
       var d3this = d3.select(this);
@@ -161,8 +175,7 @@ function apply_mask(mask) {
       // figure out what to do
       switch (mask) {
         case 'monochromatic':
-          var color = 2;
-          if (division !== color) {
+          if (division !== maskcolor) {
             d3this.attr('stroke-width', '0');
             d3this.attr('disabled', '1');
             this.style.cursor = 'auto';
@@ -170,10 +183,9 @@ function apply_mask(mask) {
           }
           break;
         case 'analogous':
-          var color = 0;
-          if (division !== color &&
-              division !== (color + 1) % divisions && // one color ahead
-              division !== ((((color - 1) % divisions) + divisions) % divisions)) { // one color behind
+          if (division !== maskcolor &&
+              division !== (maskcolor + 1) % divisions && // one color ahead
+              division !== ((((maskcolor - 1) % divisions) + divisions) % divisions)) { // one color behind
             d3this.attr('stroke-width', '0');
             d3this.attr('disabled', '1');
             this.style.cursor = 'auto';
@@ -181,9 +193,9 @@ function apply_mask(mask) {
           }
           break;
         case 'complementary':
-          var color = 0;
-          var complement = divisions / 2 + color;
-          if (division !== color &&
+          var c = maskcolor % Math.floor(divisions / 2);
+          var complement = divisions / 2 + c;
+          if (division !== c &&
               division !== Math.ceil(complement) &&
               division !== Math.floor(complement)) {
             d3this.attr('stroke-width', '0');
@@ -193,9 +205,8 @@ function apply_mask(mask) {
           }
           break;
         case 'triad':
-          var color = 0;
           var q = divisions / 3;
-          if (division % q !== color) {
+          if (division % q !== maskcolor % (divisions / 3)) {
             d3this.attr('stroke-width', '0');
             d3this.attr('disabled', '1');
             this.style.cursor = 'auto';
@@ -233,14 +244,16 @@ function init() {
   colorpreviewneutrals_div = document.getElementById('color-preview-neutrals');
   colorpreviewrgb_input = document.getElementById('color-preview-rgb');
   divisions_range = document.getElementById('divisions-range');
+  divisionvariance_range = document.getElementById('divisionvariance-range');
+  maskcolor_range = document.getElementById('maskcolor-range');
+  maskcolor_range_text = document.getElementById('maskcolor-range-text');
   prefix_input = document.getElementById('prefix');
   rings_range = document.getElementById('rings-range');
+  ringvariance_range = document.getElementById('ringvariance-range');
   rotation_range = document.getElementById('rotation-range');
   strokecolorpreviews_div = document.getElementById('stroke-color-previews');
   strokewidth_range = document.getElementById('strokewidth-range');
   title_h1 = document.getElementById('stroke-color-previews');
-  divisionvariance_range = document.getElementById('divisionvariance-range');
-  ringvariance_range = document.getElementById('ringvariance-range');
 
   // strokewidth choices
   strokecolorchoices.forEach(function(hex) {
@@ -269,6 +282,9 @@ function init() {
   // setup advanced controls for auto hide
   document.styleSheets[0].addRule('#advanced-controls', 'max-height: ' + advancedcontrols_div.offsetHeight + 'px;');
   advancedcontrols_div.className = 'hidden';
+
+  // mask color max
+  maskcolor_range.max = divisions - 1;
 
   // make the color wheel
   create();
