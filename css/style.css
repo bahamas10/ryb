@@ -1,0 +1,191 @@
+/* poormans reset */
+*, html {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	border: none;
+	outline: none;
+}
+
+/* some defaults */
+a {
+	color: #bbb;
+}
+
+body {
+	background-color: #232323;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	color: #ddd;
+}
+
+.info {
+	font-size: 10px !important;
+}
+
+input[type="text"] {
+	border: 1px solid #ddd;
+}
+
+
+/* this corrects an issue where a scroll bar appears on the page */
+svg {
+	display: block;
+}
+
+/* normal buttons */
+button {
+	margin: 5px;
+	padding: 4px;
+	font-size: 12px;
+	border: 1px outset #999;
+	color: #000;
+	background-color: #bbb;
+	transition: all 0.5s ease;
+}
+
+button:hover {
+	background-color: #999;
+}
+
+/* the circle buttons, like + and - for the neutrals */
+button.dark {
+	background-color: #333;
+	width: 25px;
+	height: 25px;
+	border: 1px solid #666;
+	border-radius: 30px;
+	color: #ddd;
+	transition: all 0.5s ease;
+}
+
+button.dark:hover {
+	background-color: #222;
+}
+
+/* left-hand side... this is where the svg goes */
+#content {
+	margin-right: 300px;
+	text-align: center;
+}
+
+/* buttons to download the png/svg of the wheel */
+#download-buttons {
+	position: absolute;
+	bottom: 0;
+	right: 300px;
+	margin: 10px;
+}
+
+/* the sidebar with the controls */
+#sidebar {
+	background-color: #1e1e1e;
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 300px;
+	margin: 0;
+	overflow-y: auto;
+	padding: 5px;
+	text-align: center;
+	box-shadow: -2px -2px 4px #151515;
+}
+
+#sidebar p {
+	font-size: 12px;
+	margin: 10px;
+}
+
+/* color preview as a big div */
+#color-preview {
+	margin-right: auto;
+	margin-left: auto;
+	border: 1px solid #222;
+	border-radius: 3px;
+	width: 200px;
+	height: 200px;
+}
+
+/* the hex value of the color picked */
+input#color-preview-rgb {
+	margin-top: 10px;
+	font-size: 20px;
+	width: 180px;
+	background-color: #1e1e1e;
+	text-align: center;
+	color: #ddd;
+	border: none;
+}
+
+/* the neutrals / compliment of the color picked */
+#color-preview-neutrals {
+	text-align: center;
+	display: table;
+	table-layout: fixed;
+	height: 20px;
+	width: 200px;
+	margin-top: 10px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+/* the advanced controls */
+#advanced-controls {
+	overflow-y: hidden;
+
+	transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: ease;
+}
+#advanced-controls.hidden {
+	max-height: 0;
+
+	transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: ease;
+}
+
+/* the different stroke colors to pick from */
+#stroke-color-previews {
+	text-align: center;
+	display: table;
+	table-layout: fixed;
+	height: 40px;
+	width: 200px;
+	margin-top: 10px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+span.value {
+	font-size: 10px;
+}
+
+/* sliders */
+input[type="range"] {
+	-webkit-appearance: none !important;
+	width: 100%;
+	height: 4px;
+	background-color: #444;
+	border-radius: 10px;
+	transition: all 0.3s ease;
+}
+
+input[type="range"]:hover {
+	background-color: #333;
+}
+
+::-webkit-slider-thumb {
+	-webkit-appearance: none !important;
+	background-color: #333;
+	width: 15px;
+	height: 15px;
+	border: 1px solid #666;
+	border-radius: 30px;
+	transition: all 0.5s ease;
+}
+
+::-webkit-slider-thumb:hover {
+	background-color: #222;
+}
