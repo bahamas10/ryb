@@ -62,16 +62,19 @@ RXB Library License: MIT
 					Mask<br />
 					<select onchange="apply_mask(this.value)">
 						<option value="">None</option>
-						<option value="monochromatic">Monochromatic</option>
 						<option value="analogous">Analogous</option>
 						<option value="complementary">Complementary</option>
-						<option value="triad">Triad</option>
+						<option value="monochromatic">Monochromatic</option>
+						<option value="split-complementary">Split Complementary</option>
+						<option value="square">Square</option>
+						<option value="tetradic">Tetradic</option>
+						<option value="triadic">Triadic</option>
 					</select>
 				</p>
 				<p>
-					Mask Color
-					<input id="maskcolor-range" oninput="maskcolor_range_oninput(this);" type="range" min="0" max="-1" step="1" value="0" /><br />
-					<span class="value" id="maskcolor-range-text">0</span>
+					Mask Rotation
+					<input id="maskrotation-range" oninput="maskrotation_range_oninput(this);" type="range" min="0" max="360" step="1" value="0" /><br />
+					<span class="value" id="maskrotation-range-text">0&deg;</span>
 				</p>
 				<p>
 					Rotation

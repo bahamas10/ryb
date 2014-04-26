@@ -13,7 +13,7 @@ var divisionvariance = 1;
 var isryb = true;
 var lastmasktype = '';
 var margin = borderwidth + 10;
-var maskcolor = 0;
+var maskrotation = 0;
 var mousedown = false;
 var numneutrals = 9;
 var radius = 400;
@@ -34,8 +34,8 @@ var colorpreviewneutrals_div;
 var colorpreviewrgb_input;
 var divisions_range;
 var divisionvariance_range;
-var maskcolor_range;
-var maskcolor_range_text;
+var maskrotation_range;
+var maskrotation_range_text;
 var prefix_input;
 var rings_range;
 var ringvariance_range;
@@ -76,8 +76,6 @@ function brightness_range_oninput(t) {
 function divisions_range_oninput(t) {
   divisions = +t.value;
   divisions_range.textContent = divisions;
-  maskcolor_range.max = divisions - 1;
-  maskcolor = Math.min(maskcolor, divisions - 2);
   create();
 }
 
@@ -113,12 +111,13 @@ function toggle_advanced_controls() {
     advancedcontrols_div.className = 'hidden';
 }
 
-// maskcolor slider
-function maskcolor_range_oninput(t) {
-  maskcolor = +t.value;
-  maskcolor_range_text.innerHTML = maskcolor;
+// mask rotation slider
+function maskrotation_range_oninput(t) {
+  maskrotation = +t.value;
+  maskrotation_range_text.innerHTML = maskrotation + '&deg;';
 
-  apply_mask(lastmasktype);
+  svg.selectAll('g.mask')
+    .attr('transform', 'rotate(' + maskrotation + ')');
 }
 
 // rotation slider
@@ -154,6 +153,7 @@ function borderwidth_range_oninput(t) {
     .attr('viewBox', (-margin) + ' ' + (-margin) + ' ' + (radius*2+margin*2) + ' '  + (radius*2+margin*2));
   svg.select('circle')
     .attr('r', radius + borderwidth);
+  apply_mask(lastmasktype);
 }
 
 // border color slider
@@ -193,80 +193,6 @@ function toggle_ryb_rgb_button() {
     });
 }
 
-// apply a mask
-function apply_mask(mask) {
-  lastmasktype = mask;
-
-  maskcolor_range.disabled = !mask;
-
-  svg.selectAll('path.color-wedge')
-    .attr('fill', function(d, i) {
-      var d3this = d3.select(this);
-
-      // figure out the division and ring we are messing with
-      var division = +d3this.attr('division');
-      var ring = +d3this.attr('ring');
-
-      // figure out what to do
-      switch (mask) {
-        case 'monochromatic':
-          if (division !== maskcolor) {
-            d3this.attr('stroke-width', '0');
-            d3this.attr('disabled', '1');
-            this.style.cursor = 'auto';
-            return;
-          }
-          break;
-        case 'analogous':
-          if (division !== maskcolor &&
-              division !== (maskcolor + 1) % divisions && // one color ahead
-              division !== ((((maskcolor - 1) % divisions) + divisions) % divisions)) { // one color behind
-            d3this.attr('stroke-width', '0');
-            d3this.attr('disabled', '1');
-            this.style.cursor = 'auto';
-            return;
-          }
-          break;
-        case 'complementary':
-          var c = maskcolor % Math.floor(divisions / 2);
-          var complement = divisions / 2 + c;
-          if (division !== c &&
-              division !== Math.ceil(complement) &&
-              division !== Math.floor(complement)) {
-            d3this.attr('stroke-width', '0');
-            d3this.attr('disabled', '1');
-            this.style.cursor = 'auto';
-            return;
-          }
-          break;
-        case 'triad':
-          var q = divisions / 3;
-          if (division % q !== maskcolor % (divisions / 3)) {
-            d3this.attr('stroke-width', '0');
-            d3this.attr('disabled', '1');
-            this.style.cursor = 'auto';
-            return;
-          }
-          break;
-        default:
-          // "None" mask will fall through
-          break;
-      }
-
-      var ryb = d.data.neutrals[ring];
-      var color = RXB.stepcolor(ryb, brightness / 255, 255);
-
-      // apply the normal color
-      d3this.attr('stroke-width', strokewidth + 'px');
-      d3this.attr('disabled', '0');
-      this.style.cursor = 'crosshair';
-      if (isryb)
-        return d3.rgb.apply(d3, RXB.ryb2rgb(color));
-      else
-        return d3.rgb.apply(d3, color);
-    });
-}
-
 window.addEventListener('load', init);
 function init() {
   // links should open in new tabs
@@ -282,8 +208,8 @@ function init() {
   colorpreviewrgb_input = document.getElementById('color-preview-rgb');
   divisions_range = document.getElementById('divisions-range');
   divisionvariance_range = document.getElementById('divisionvariance-range');
-  maskcolor_range = document.getElementById('maskcolor-range');
-  maskcolor_range_text = document.getElementById('maskcolor-range-text');
+  maskrotation_range = document.getElementById('maskrotation-range');
+  maskrotation_range_text = document.getElementById('maskrotation-range-text');
   prefix_input = document.getElementById('prefix');
   rings_range = document.getElementById('rings-range');
   ringvariance_range = document.getElementById('ringvariance-range');
@@ -319,9 +245,6 @@ function init() {
   // setup advanced controls for auto hide
   document.styleSheets[0].addRule('#advanced-controls', 'max-height: ' + advancedcontrols_div.offsetHeight + 'px;');
   advancedcontrols_div.className = 'hidden';
-
-  // mask color max
-  maskcolor_range.max = divisions - 1;
 
   // make the color wheel
   create();
@@ -418,6 +341,7 @@ function create() {
       .attr('shape-rendering', strokewidth === 0 ? 'crispEdges' : 'auto')
       .attr('fill', function(d, j) {
         // figure out the background color
+        this.style.cursor = 'crosshair';
         var d3this = d3.select(this);
         d3this.attr('ring', i);
         d3this.attr('division', j);
@@ -599,4 +523,68 @@ function get_file_name() {
   if (prefix_input.value)
     s = prefix_input.value + '-' + s;
   return s;
+}
+
+// create a mask
+function apply_mask(mask) {
+  lastmasktype = mask;
+
+  svg.selectAll('g.mask').remove();
+
+  var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return 1; });
+
+  var arc = d3.svg.arc()
+    .innerRadius(0)
+    .outerRadius(radius + borderwidth + 1);
+
+  var data = [];
+
+  // figure out what to do
+  switch (mask) {
+    case 'monochromatic':
+      data = [1, 0, 0, 0, 0, 0];
+      break;
+    case 'analogous':
+      data = [1, 0, 0];
+      break;
+    case 'complementary':
+      data = [1, 0, 0, 1, 0, 0];
+      break;
+    case 'split-complementary':
+      data = [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0];
+      break;
+    case 'tetradic':
+      data = [1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0];
+      break;
+    case 'square':
+      data = [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0];
+      break;
+    case 'triadic':
+      data = [1, 0, 1, 0, 1, 0];
+      break;
+    default:
+      // "None" mask will fall through
+      break;
+  }
+
+  var g = svg
+    .append('g')
+    .attr('transform', 'rotate(' + maskrotation + ')')
+    .attr('class', 'mask');
+
+  g.selectAll('g')
+    .data(pie(data))
+    .enter()
+    .append('path')
+    .attr('d', arc)
+    .attr('class', 'mask')
+    .attr('stroke', '#000')
+    .attr('stroke-width', '1px')
+    .attr('fill', function(d, i) {
+      this.style.visibility = d.data ? 'hidden' : 'visible';
+      this.style.cursor = d.data ? 'crosshair' : 'auto';
+      return d3.rgb('#000');
+    });
 }
