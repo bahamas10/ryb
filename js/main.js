@@ -1,12 +1,18 @@
 /* jshint browser: true */
 /* globals d3, RXB */
 // defaults
+
+var borderwidth = 10;
+var bordercolors = [
+  '#777',
+  '#444'
+];
 var brightness = 0;
 var divisions = 12;
 var divisionvariance = 1;
 var isryb = true;
 var lastmasktype = '';
-var margin = 20;
+var margin = borderwidth + 10;
 var maskcolor = 0;
 var mousedown = false;
 var numneutrals = 9;
@@ -20,6 +26,8 @@ var strokewidth = 2;
 
 // html elements
 var advancedcontrols_div;
+var bordercolor_range;
+var borderwidth_range;
 var brightness_range;
 var colorpreview_div;
 var colorpreviewneutrals_div;
@@ -136,6 +144,31 @@ function ringvariance_range_oninput(t) {
   create();
 }
 
+// border width slider
+function borderwidth_range_oninput(t) {
+  borderwidth = +t.value;
+  borderwidth_range.textContent = borderwidth;
+  margin = borderwidth + 10;
+
+  d3.select(svg.node().parentNode)
+    .attr('viewBox', (-margin) + ' ' + (-margin) + ' ' + (radius*2+margin*2) + ' '  + (radius*2+margin*2));
+  svg.select('circle')
+    .attr('r', radius + borderwidth);
+}
+
+// border color slider
+function bordercolor_range_oninput(t) {
+  var bordercolor = +t.value;
+  bordercolor_range.textContent = bordercolor;
+
+  svg.select('#grad1')
+    .selectAll('stop')
+    .attr('stop-color', function(d, i) {
+      return d3.rgb(bordercolors[i]).darker(bordercolor / 10);
+    });
+}
+
+
 // toggle ryb rgb button
 function toggle_ryb_rgb_button() {
   isryb = !isryb;
@@ -241,6 +274,8 @@ function init() {
 
   // get some html elements
   advancedcontrols_div = document.getElementById('advanced-controls');
+  bordercolor_range = document.getElementById('bordercolor-range');
+  borderwidth_range = document.getElementById('borderwidth-range');
   brightness_range = document.getElementById('brightness-range');
   colorpreview_div = document.getElementById('color-preview');
   colorpreviewneutrals_div = document.getElementById('color-preview-neutrals');
@@ -324,6 +359,24 @@ function create() {
     .append('g')
     .attr('transform', 'translate(' + radius + ',' + radius + ') rotate(' + rotation + ')');
 
+  var defs = svg.append('defs');
+  var grad1 = defs.append('radialGradient')
+    .attr('id', 'grad1');
+  grad1.append('stop')
+    .attr('offset', '90%')
+    .attr('stop-color', bordercolors[0]);
+  grad1.append('stop')
+    .attr('offset', '100%')
+    .attr('stop-color', bordercolors[1]);
+    /*
+  grad1.append('stop')
+    .attr('offset', '96%')
+    .attr('stop-color', '#424242');
+  grad1.append('stop')
+    .attr('offset', '100%')
+    .attr('stop-color', '#8c8c8c');
+    */
+
   // figure out the arc size
   var arcsizes = [0];
   // generate arc sizes in the form of [0, 1, 2, 1, 2, ...]
@@ -337,20 +390,12 @@ function create() {
   for (i = 1; i <= rings; i++)
     arcradius[i] = arcradius[i-1] - (arcsizes[i] * ringunitsize);
 
-  // make the outermost ring first (the outline)
-  var pie = d3.layout.pie()
-    .sort(null)
-    .value(function() { return 1; });
-  var arc = d3.svg.arc()
-    .innerRadius(0)
-    .outerRadius(arcradius[0]+10);
-  svg.selectAll('g')
-    .data(pie([1]))
-    .enter()
-    .append('path')
-    .attr('transform', 'translate(0,0)')
-    .attr('d', arc)
-    .attr('fill', '#777');
+  // make the outermost ring first (the outline / border)
+  svg.append('circle')
+    .attr('cx', 0)
+    .attr('cy', 0)
+    .attr('r', radius + borderwidth)
+    .attr('fill', 'url(#grad1)');
 
   // create an arc for each ring
   for (i = 0; i < rings; i++) {

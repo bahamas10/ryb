@@ -89,6 +89,16 @@ RXB Library License: MIT
 					<span class="value" id="ringvariance-range">1</span>
 				</p>
 				<p>
+					Border Width
+					<input oninput="borderwidth_range_oninput(this);" type="range" min="0" max="80" step="10" value="10" /><br />
+					<span class="value" id="borderwidth-range">10</span>
+				</p>
+				<p>
+					Border Color
+					<input oninput="bordercolor_range_oninput(this);" type="range" min="0" max="20" step="1" value="0" /><br />
+					<span class="value" id="bordercolor-range">0</span>
+				</p>
+				<p>
 					Save As...<br />
 					<input type="text" id="prefix" placeholder="prefix"></input><br />
 					<span class="value">prefix filename for saved images</span>
