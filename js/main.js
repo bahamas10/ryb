@@ -1,10 +1,12 @@
+/* jshint browser: true */
+/* globals d3, RXB */
 // defaults
 var brightness = 0;
 var divisions = 12;
 var divisionvariance = 1;
 var isryb = true;
 var lastmasktype = '';
-var margin = 10;
+var margin = 20;
 var maskcolor = 0;
 var mousedown = false;
 var numneutrals = 9;
@@ -46,7 +48,7 @@ function brightness_range_oninput(t) {
   brightness = -t.value;
 
   // figure out the background color
-  svg.selectAll('path')
+  svg.selectAll('path.color-wedge')
     .attr('fill', function(d) {
       var d3this = d3.select(this);
 
@@ -83,7 +85,7 @@ function strokewidth_range_oninput(t) {
   strokewidth = +t.value;
   strokewidth_range.textContent = strokewidth + 'px';
 
-  svg.selectAll('path')
+  svg.selectAll('path.color-wedge')
     .attr('stroke-width', function(d) {
       var d3this = d3.select(this);
 
@@ -139,10 +141,10 @@ function toggle_ryb_rgb_button() {
   isryb = !isryb;
 
   document.title = (isryb ? 'RYB' : 'RGB') + ' Color Picker';
-  title.textContent = '- ' + (isryb ? 'ryb' : 'rgb') + ' -';
+  title_h1.textContent = '- ' + (isryb ? 'ryb' : 'rgb') + ' -';
 
   // figure out the background color
-  svg.selectAll('path')
+  svg.selectAll('path.color-wedge')
     .attr('fill', function(d) {
       var d3this = d3.select(this);
 
@@ -164,7 +166,7 @@ function apply_mask(mask) {
 
   maskcolor_range.disabled = !mask;
 
-  svg.selectAll('path')
+  svg.selectAll('path.color-wedge')
     .attr('fill', function(d, i) {
       var d3this = d3.select(this);
 
@@ -253,7 +255,7 @@ function init() {
   rotation_range = document.getElementById('rotation-range');
   strokecolorpreviews_div = document.getElementById('stroke-color-previews');
   strokewidth_range = document.getElementById('strokewidth-range');
-  title_h1 = document.getElementById('stroke-color-previews');
+  title_h1 = document.getElementById('title');
 
   // strokewidth choices
   strokecolorchoices.forEach(function(hex) {
@@ -264,7 +266,7 @@ function init() {
     d.title = hex;
     d.onclick = function() {
       strokecolor = hex;
-      svg.selectAll('path').attr('stroke', hex);
+      svg.selectAll('path.color-wedge').attr('stroke', hex);
     };
     d.onmousedown = function() {
       mousedown = true;
@@ -290,7 +292,7 @@ function init() {
   create();
 
   // initial color
-  var foo = svg.selectAll('path');
+  var foo = svg.selectAll('path.color-wedge');
   foo.on('click').call(foo[0][0]);
 
   // optional debug stuff
@@ -302,6 +304,7 @@ function init() {
 
 // destroy and recreate the color wheel
 function create() {
+  var i;
   try {
     // regenerate the wheel on create
     document.getElementsByTagName('svg')[0].remove();
@@ -324,23 +327,38 @@ function create() {
   // figure out the arc size
   var arcsizes = [0];
   // generate arc sizes in the form of [0, 1, 2, 1, 2, ...]
-  for (var i = 0; i < rings; i++)
+  for (i = 0; i < rings; i++)
     arcsizes.push(Math.floor(Math.random() * ringvariance) + 1);
 
   var arcsizessum = arcsizes.reduce(function(a, b) { return a + b; });
   var ringunitsize = radius / arcsizessum;
 
   var arcradius = [radius];
-  for (var i = 1; i <= rings; i++)
+  for (i = 1; i <= rings; i++)
     arcradius[i] = arcradius[i-1] - (arcsizes[i] * ringunitsize);
 
+  // make the outermost ring first (the outline)
+  var pie = d3.layout.pie()
+    .sort(null)
+    .value(function() { return 1; });
+  var arc = d3.svg.arc()
+    .innerRadius(0)
+    .outerRadius(arcradius[0]+10);
+  svg.selectAll('g')
+    .data(pie([1]))
+    .enter()
+    .append('path')
+    .attr('transform', 'translate(0,0)')
+    .attr('d', arc)
+    .attr('fill', '#777');
+
   // create an arc for each ring
-  for (var i = 0; i < rings; i++) {
-    var pie = d3.layout.pie()
+  for (i = 0; i < rings; i++) {
+    pie = d3.layout.pie()
       .sort(null)
       .value(function(d) { return Math.floor(Math.random() * divisionvariance + 1); });
 
-    var arc = d3.svg.arc()
+    arc = d3.svg.arc()
       .innerRadius(arcradius[i])
       .outerRadius(arcradius[i+1]);
 
@@ -349,6 +367,7 @@ function create() {
       .enter()
       .append('path')
       .attr('d', arc)
+      .attr('class', 'color-wedge')
       .attr('stroke', strokecolor)
       .attr('stroke-width', strokewidth + 'px')
       .attr('shape-rendering', strokewidth === 0 ? 'crispEdges' : 'auto')
@@ -516,7 +535,7 @@ function download_neutrals_png() {
 
 function random_click() {
   // simulate clicking a random color
-  var foo = svg.selectAll('path');
+  var foo = svg.selectAll('path.color-wedge');
   foo.on('click').call(foo[0][Math.floor(Math.random() * foo[0].length - 1)]);
 }
 
