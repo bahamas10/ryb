@@ -50,6 +50,74 @@ var svg;
 // d3 elements
 var last_element_clicked;
 
+// page loaded
+window.addEventListener('load', init);
+function init() {
+  // links should open in new tabs
+  d3.selectAll('a').attr('target', 'new');
+
+  // get some html elements
+  advancedcontrols_div = document.getElementById('advanced-controls');
+  bordercolor_range = document.getElementById('bordercolor-range');
+  borderwidth_range = document.getElementById('borderwidth-range');
+  brightness_range = document.getElementById('brightness-range');
+  colorpreview_div = document.getElementById('color-preview');
+  colorpreviewneutrals_div = document.getElementById('color-preview-neutrals');
+  colorpreviewrgb_input = document.getElementById('color-preview-rgb');
+  divisions_range = document.getElementById('divisions-range');
+  divisionvariance_range = document.getElementById('divisionvariance-range');
+  maskrotation_range = document.getElementById('maskrotation-range');
+  maskrotation_range_text = document.getElementById('maskrotation-range-text');
+  prefix_input = document.getElementById('prefix');
+  rings_range = document.getElementById('rings-range');
+  ringvariance_range = document.getElementById('ringvariance-range');
+  rotation_range = document.getElementById('rotation-range');
+  strokecolorpreviews_div = document.getElementById('stroke-color-previews');
+  strokewidth_range = document.getElementById('strokewidth-range');
+  title_h1 = document.getElementById('title');
+
+  // strokewidth choices
+  strokecolorchoices.forEach(function(hex) {
+    var d = document.createElement('div');
+    d.style.display = 'table-cell';
+    d.style.backgroundColor = hex;
+    d.style.cursor = 'crosshair';
+    d.title = hex;
+    d.onclick = function() {
+      strokecolor = hex;
+      svg.selectAll('path.color-wedge').attr('stroke', hex);
+    };
+    d.onmousedown = function() {
+      mousedown = true;
+    };
+    d.onmouseup = function() {
+      mousedown = false;
+    };
+    d.onmouseover = function() {
+      if (mousedown)
+        d.onclick.call(this);
+    };
+    strokecolorpreviews_div.appendChild(d);
+  });
+
+  // setup advanced controls for auto hide
+  document.styleSheets[0].addRule('#advanced-controls', 'max-height: ' + advancedcontrols_div.offsetHeight + 'px;');
+  advancedcontrols_div.className = 'hidden';
+
+  // make the color wheel
+  create();
+
+  // initial color
+  var foo = svg.selectAll('path.color-wedge');
+  foo.on('click').call(foo[0][0]);
+
+  // optional debug stuff
+  if (window.location.hash === '#debug') {
+    // show advanced controls
+    advancedcontrols_div.className = '';
+  }
+}
+
 // brightness slider
 function brightness_range_oninput(t) {
   brightness_range.textContent = t.value;
@@ -76,6 +144,7 @@ function brightness_range_oninput(t) {
 function divisions_range_oninput(t) {
   divisions = +t.value;
   divisions_range.textContent = divisions;
+
   create();
 }
 
@@ -114,7 +183,7 @@ function toggle_advanced_controls() {
 // mask rotation slider
 function maskrotation_range_oninput(t) {
   maskrotation = +t.value;
-  maskrotation_range_text.innerHTML = maskrotation + '&deg;';
+  maskrotation_range_text.innerHTML = maskrotation.toFixed(2) + '&deg;';
 
   svg.selectAll('g.mask')
     .attr('transform', 'rotate(' + maskrotation + ')');
@@ -193,73 +262,6 @@ function toggle_ryb_rgb_button() {
     });
 }
 
-window.addEventListener('load', init);
-function init() {
-  // links should open in new tabs
-  d3.selectAll('a').attr('target', 'new');
-
-  // get some html elements
-  advancedcontrols_div = document.getElementById('advanced-controls');
-  bordercolor_range = document.getElementById('bordercolor-range');
-  borderwidth_range = document.getElementById('borderwidth-range');
-  brightness_range = document.getElementById('brightness-range');
-  colorpreview_div = document.getElementById('color-preview');
-  colorpreviewneutrals_div = document.getElementById('color-preview-neutrals');
-  colorpreviewrgb_input = document.getElementById('color-preview-rgb');
-  divisions_range = document.getElementById('divisions-range');
-  divisionvariance_range = document.getElementById('divisionvariance-range');
-  maskrotation_range = document.getElementById('maskrotation-range');
-  maskrotation_range_text = document.getElementById('maskrotation-range-text');
-  prefix_input = document.getElementById('prefix');
-  rings_range = document.getElementById('rings-range');
-  ringvariance_range = document.getElementById('ringvariance-range');
-  rotation_range = document.getElementById('rotation-range');
-  strokecolorpreviews_div = document.getElementById('stroke-color-previews');
-  strokewidth_range = document.getElementById('strokewidth-range');
-  title_h1 = document.getElementById('title');
-
-  // strokewidth choices
-  strokecolorchoices.forEach(function(hex) {
-    var d = document.createElement('div');
-    d.style.display = 'table-cell';
-    d.style.backgroundColor = hex;
-    d.style.cursor = 'crosshair';
-    d.title = hex;
-    d.onclick = function() {
-      strokecolor = hex;
-      svg.selectAll('path.color-wedge').attr('stroke', hex);
-    };
-    d.onmousedown = function() {
-      mousedown = true;
-    };
-    d.onmouseup = function() {
-      mousedown = false;
-    };
-    d.onmouseover = function() {
-      if (mousedown)
-        d.onclick.call(this);
-    };
-    strokecolorpreviews_div.appendChild(d);
-  });
-
-  // setup advanced controls for auto hide
-  document.styleSheets[0].addRule('#advanced-controls', 'max-height: ' + advancedcontrols_div.offsetHeight + 'px;');
-  advancedcontrols_div.className = 'hidden';
-
-  // make the color wheel
-  create();
-
-  // initial color
-  var foo = svg.selectAll('path.color-wedge');
-  foo.on('click').call(foo[0][0]);
-
-  // optional debug stuff
-  if (window.location.hash === '#debug') {
-    // show advanced controls
-    advancedcontrols_div.className = '';
-  }
-}
-
 // destroy and recreate the color wheel
 function create() {
   var i;
@@ -273,6 +275,10 @@ function create() {
   var data = RXB.rainbow(divisions).map(function(ryb) {
     return {ryb: ryb, neutrals: RXB.neutrals(ryb, 0, rings*2-1)};
   });
+
+  // adjust the mask rotation step
+  maskrotation_range.step = 360 / divisions;
+  maskrotation = Math.floor(maskrotation / divisions) * maskrotation_range.step;
 
   // create the SVG
   svg = d3.select('#content').append('svg')
@@ -537,7 +543,7 @@ function apply_mask(mask) {
 
   var arc = d3.svg.arc()
     .innerRadius(0)
-    .outerRadius(radius + borderwidth + 1);
+    .outerRadius(radius + 1);
 
   var data = [];
 
