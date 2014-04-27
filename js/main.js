@@ -13,6 +13,7 @@ var divisionvariance = 1;
 var isryb = true;
 var lastmasktype = '';
 var margin = borderwidth + 10;
+var maskcolor = '#333';
 var maskrotation = 0;
 var mousedown = false;
 var numneutrals = 9;
@@ -234,6 +235,14 @@ function bordercolor_range_oninput(t) {
     .selectAll('stop')
     .attr('stop-color', function(d, i) {
       return d3.rgb(bordercolors[i]).darker(bordercolor / 10);
+    });
+  svg.select('g.mask')
+    .selectAll('path')
+    .attr('fill', function(d, i) {
+      return d3.rgb(maskcolor).darker(bordercolor / 10);
+    })
+    .attr('stroke', function(d, i) {
+      return d3.rgb(maskcolor).darker(bordercolor / 10);
     });
 }
 
@@ -586,11 +595,11 @@ function apply_mask(mask) {
     .append('path')
     .attr('d', arc)
     .attr('class', 'mask')
-    .attr('stroke', '#000')
-    .attr('stroke-width', '1px')
+    .attr('stroke', maskcolor)
+    //.attr('stroke-width', '5px')
     .attr('fill', function(d, i) {
       this.style.visibility = d.data ? 'hidden' : 'visible';
       this.style.cursor = d.data ? 'crosshair' : 'auto';
-      return d3.rgb('#000');
+      return d3.rgb(maskcolor);
     });
 }
