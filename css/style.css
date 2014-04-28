@@ -19,8 +19,12 @@ body {
 	color: #ddd;
 }
 
-.info {
+/* footer */
+#sidebar p.info {
 	font-size: 10px !important;
+	margin-top: 20px;
+	padding-top: 10px;
+	border-top: 1px solid #777;
 }
 
 input[type="text"] {
@@ -63,6 +67,7 @@ button.circle:hover {
 	background-color: #222;
 }
 
+
 /* left-hand side... this is where the svg goes */
 #content {
 	margin-right: 300px;
@@ -92,9 +97,45 @@ button.circle:hover {
 	box-shadow: -2px -2px 4px #151515;
 }
 
+/* accordion */
+.accordion-section {
+	background-color: #222;
+	border: 3px solid #444;
+	margin: 10px 0;
+	border-radius: 5px;
+}
+
+/* the accordion buttons */
+.accordion-section > button {
+	width: 100%;
+	margin: 0;
+	border: none;
+	background-color: #222;
+	color: #999;
+	cursor: pointer;
+	text-align: left;
+}
+
+.accordion-section > .content {
+	max-height: -1; /* determined programatically */
+	overflow-y: hidden;
+
+	margin-bottom: 10px;
+	margin-top: 5px;
+
+	transition-property: all;
+	transition-duration: .3s;
+	transition-timing-function: ease;
+}
+
+.accordion-section > .content.hidden {
+	max-height: 0;
+	margin: 0;
+}
+
 #sidebar p {
 	font-size: 12px;
-	margin: 10px;
+	margin: 3px 20px;
 }
 
 /* color preview as a big div */
@@ -104,7 +145,7 @@ button.circle:hover {
 	border: 1px solid #222;
 	border-radius: 3px;
 	width: 200px;
-	height: 200px;
+	height: 100px;
 }
 
 /* the hex value of the color picked */
@@ -130,21 +171,6 @@ input#color-preview-rgb {
 	margin-left: auto;
 }
 
-/* the advanced controls */
-#advanced-controls {
-	overflow-y: hidden;
-
-	transition-property: all;
-	transition-duration: .5s;
-	transition-timing-function: ease;
-}
-#advanced-controls.hidden {
-	max-height: 0;
-
-	transition-property: all;
-	transition-duration: .5s;
-	transition-timing-function: ease;
-}
 
 /* the different stroke colors to pick from */
 #stroke-color-previews {
@@ -158,6 +184,7 @@ input#color-preview-rgb {
 	margin-left: auto;
 }
 
+/* the values of the sliders, ie "360&deg;" */
 span.value {
 	font-size: 10px;
 }

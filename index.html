@@ -23,89 +23,116 @@ RXB Library License: MIT
 		</div>
 		<div id="sidebar">
 			<h1 id="title">- ryb -</h1>
-			<p>
-				Brightness
-				<input oninput="brightness_range_oninput(this);" type="range" min="-255" max="255" step="1" value="0" /><br />
-				<span class="value" id="brightness-range">0</span>
-			</p>
-			<p>
-				Divisions
-				<input oninput="divisions_range_oninput(this);" type="range" min="3" max="150" step="3" value="12" /><br />
-				<span class="value" id="divisions-range">12</span>
-			</p>
-			<p>
-				Rings
-				<input oninput="rings_range_oninput(this);" type="range" min="1" max="50" step="1" value="5" /><br />
-				<span class="value" id="rings-range">5</span>
-			</p>
-			<p>
-				Stroke Width
-				<input oninput="strokewidth_range_oninput(this);" type="range" min="0" max="15" step="1" value="2" /><br />
-				<span class="value" id="strokewidth-range">2px</span>
-			</p>
-			<p>
-				<input id="color-preview-rgb" onclick="this.setSelectionRange(0, this.value.length);" value="#9c744a" />
-				<div id="color-preview"></div>
-				<div id="color-preview-neutrals"></div>
-				<button onclick="random_click()" class="circle" title="Randomly select a color from the current color wheel">?</button>
-				<button onclick="numneutrals = Math.max(--numneutrals, 2); redo_last_click()" class="circle" title="Reduce number of neutrals to display">-</button>
-				<button onclick="numneutrals = Math.min(++numneutrals, 15); redo_last_click();" class="circle" title="Increase number of neutrals to display">+</button>
-				<button onclick="download_neutrals_png()" class="circle" title="Download a PNG rendering of the current neutral swatch">&darr;</button>
-			</p>
-			<button onclick="toggle_advanced_controls();" title="Toggle display of advanced controls">Advanced Controls</button>
-			<div id="advanced-controls">
-				<p>
-					Stroke Color
-					<div id="stroke-color-previews"></div>
-				</p>
-				<p>
-					Mask<br />
-					<select onchange="apply_mask(this.value)">
-						<option value="">None</option>
-						<option value="analogous">Analogous</option>
-						<option value="complementary">Complementary</option>
-						<option value="monochromatic">Monochromatic</option>
-						<option value="split-complementary">Split Complementary</option>
-						<option value="square">Square</option>
-						<option value="tetradic">Tetradic</option>
-						<option value="triadic">Triadic</option>
-					</select>
-				</p>
-				<p>
-					Mask Rotation
-					<input id="maskrotation-range" oninput="maskrotation_range_oninput(this);" type="range" min="0" max="360" step="1" value="0" /><br />
-					<span class="value" id="maskrotation-range-text">0.00&deg;</span>
-				</p>
-				<p>
-					Rotation
-					<input oninput="rotation_range_oninput(this);" type="range" min="0" max="360" step="1" value="0" /><br />
-					<span class="value" id="rotation-range">0&deg;</span>
-				</p>
-				<p>
-					Division Variance
-					<input oninput="divisionvariance_range_oninput(this);" type="range" min="1" max="10" step="1" value="1" /><br />
-					<span class="value" id="divisionvariance-range">1</span>
-				</p>
-				<p>
-					Ring Variance
-					<input oninput="ringvariance_range_oninput(this);" type="range" min="1" max="10" step="1" value="1" /><br />
-					<span class="value" id="ringvariance-range">1</span>
-				</p>
-				<p>
-					Border Width
-					<input oninput="borderwidth_range_oninput(this);" type="range" min="0" max="80" step="10" value="10" /><br />
-					<span class="value" id="borderwidth-range">10</span>
-				</p>
-				<p>
-					Border Color
-					<input oninput="bordercolor_range_oninput(this);" type="range" min="0" max="20" step="1" value="0" /><br />
-					<span class="value" id="bordercolor-range">0</span>
-				</p>
-				<p>
-					Save As...<br />
-					<input type="text" id="prefix" placeholder="prefix"></input><br />
-					<span class="value">prefix filename for saved images</span>
-				</p>
+			<div class="accordion-section show">
+				<button>Color Preview</button>
+				<div class="content">
+					<p>
+						<input id="color-preview-rgb" onclick="this.setSelectionRange(0, this.value.length);" value="#9c744a" />
+						<div id="color-preview"></div>
+						<div id="color-preview-neutrals"></div>
+						<button onclick="random_click()" class="circle" title="Randomly select a color from the current color wheel">?</button>
+						<button onclick="numneutrals = Math.max(--numneutrals, 2); redo_last_click()" class="circle" title="Reduce number of neutrals to display">-</button>
+						<button onclick="numneutrals = Math.min(++numneutrals, 15); redo_last_click();" class="circle" title="Increase number of neutrals to display">+</button>
+						<button onclick="download_neutrals_png()" class="circle" title="Download a PNG rendering of the current neutral swatch">&darr;</button>
+					</p>
+				</div>
+			</div>
+			<div class="accordion-section show">
+				<button>Basic Controls</button>
+				<div class="content">
+					<p>
+						Brightness
+						<input oninput="brightness_range_oninput(this);" type="range" min="-255" max="255" step="1" value="0" /><br />
+						<span class="value" id="brightness-range">0</span>
+					</p>
+					<p>
+						Divisions
+						<input oninput="divisions_range_oninput(this);" type="range" min="3" max="150" step="3" value="12" /><br />
+						<span class="value" id="divisions-range">12</span>
+					</p>
+					<p>
+						Rings
+						<input oninput="rings_range_oninput(this);" type="range" min="1" max="50" step="1" value="5" /><br />
+						<span class="value" id="rings-range">5</span>
+					</p>
+					<p>
+						Rotation
+						<input oninput="rotation_range_oninput(this);" type="range" min="0" max="360" step="1" value="0" /><br />
+						<span class="value" id="rotation-range">0&deg;</span>
+					</p>
+				</div>
+			</div>
+			<div class="accordion-section">
+				<button>Stroke</button>
+				<div class="content">
+					<p>
+						Stroke Color
+						<div id="stroke-color-previews"></div>
+					</p>
+					<p>
+						Stroke Width
+						<input oninput="strokewidth_range_oninput(this);" type="range" min="0" max="15" step="1" value="2" /><br />
+						<span class="value" id="strokewidth-range">2px</span>
+					</p>
+				</div>
+			</div>
+			<div class="accordion-section">
+				<button>Color Harmonies</button>
+				<div class="content">
+					<p>
+						Mask<br />
+						<select onchange="apply_mask(this.value)">
+							<option value="">None</option>
+							<option value="analogous">Analogous</option>
+							<option value="complementary">Complementary</option>
+							<option value="monochromatic">Monochromatic</option>
+							<option value="split-complementary">Split Complementary</option>
+							<option value="square">Square</option>
+							<option value="tetradic">Tetradic</option>
+							<option value="triadic">Triadic</option>
+						</select>
+					</p>
+					<p>
+						Mask Rotation
+						<input id="maskrotation-range" oninput="maskrotation_range_oninput(this);" type="range" min="0" max="360" step="1" value="0" /><br />
+						<span class="value" id="maskrotation-range-text">0.00&deg;</span>
+					</p>
+				</div>
+			</div>
+			<div class="accordion-section">
+				<button>Border</button>
+				<div class="content">
+					<p>
+						Border Width
+						<input oninput="borderwidth_range_oninput(this);" type="range" min="0" max="80" step="10" value="10" /><br />
+						<span class="value" id="borderwidth-range">10</span>
+					</p>
+					<p>
+						Border Color
+						<input oninput="bordercolor_range_oninput(this);" type="range" min="0" max="20" step="1" value="0" /><br />
+						<span class="value" id="bordercolor-range">0</span>
+					</p>
+				</div>
+			</div>
+			<div class="accordion-section">
+				<button>Miscellaneous</button>
+				<div class="content">
+					<p>
+						Division Variance
+						<input oninput="divisionvariance_range_oninput(this);" type="range" min="1" max="10" step="1" value="1" /><br />
+						<span class="value" id="divisionvariance-range">1</span>
+					</p>
+					<p>
+						Ring Variance
+						<input oninput="ringvariance_range_oninput(this);" type="range" min="1" max="10" step="1" value="1" /><br />
+						<span class="value" id="ringvariance-range">1</span>
+					</p>
+					<p>
+						Save As...<br />
+						<input type="text" id="prefix" placeholder="prefix"></input><br />
+						<span class="value">prefix filename for saved images</span>
+					</p>
+				</div>
 			</div>
 			<p>
 				<button onclick="toggle_ryb_rgb_button();" title="Toggle RYB/RGB mode">RYB vs RGB</button>

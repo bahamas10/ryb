@@ -26,7 +26,6 @@ var strokecolorchoices = ['#000', '#333', '#fff'];
 var strokewidth = 2;
 
 // html elements
-var advancedcontrols_div;
 var bordercolor_range;
 var borderwidth_range;
 var brightness_range;
@@ -58,7 +57,6 @@ function init() {
   d3.selectAll('a').attr('target', 'new');
 
   // get some html elements
-  advancedcontrols_div = document.getElementById('advanced-controls');
   bordercolor_range = document.getElementById('bordercolor-range');
   borderwidth_range = document.getElementById('borderwidth-range');
   brightness_range = document.getElementById('brightness-range');
@@ -101,9 +99,38 @@ function init() {
     strokecolorpreviews_div.appendChild(d);
   });
 
-  // setup advanced controls for auto hide
-  document.styleSheets[0].addRule('#advanced-controls', 'max-height: ' + advancedcontrols_div.offsetHeight + 'px;');
-  advancedcontrols_div.className = 'hidden';
+  // Setup pure CSS accordion
+  var accordionsections = document.getElementsByClassName('accordion-section');
+  Array.prototype.forEach.call(accordionsections, function(section) {
+    var button = section.getElementsByTagName('button')[0];
+    var content = section.getElementsByClassName('content')[0];
+    var maxHeight = content.offsetHeight + 'px';
+
+    var span = document.createElement('span');
+    span.style.float = 'left';
+    span.style.marginRight = '10px';
+    button.appendChild(span);
+
+    button.onclick = function() {
+      if (content.classList.contains('hidden')) {
+        content.style.maxHeight = maxHeight;
+        content.classList.remove('hidden');
+        span.innerHTML = '&#9660;';
+      } else {
+        content.style.maxHeight = 0;
+        content.classList.add('hidden');
+        span.innerHTML = '&#9658;';
+      }
+    };
+
+    // hidden by default
+    content.classList.add('hidden');
+    span.innerHTML = '&#9658;';
+
+    // conditionally show things
+    if (section.classList.contains('show'))
+      button.onclick.call(button);
+  });
 
   // make the color wheel
   create();
@@ -114,8 +141,6 @@ function init() {
 
   // optional debug stuff
   if (window.location.hash === '#debug') {
-    // show advanced controls
-    advancedcontrols_div.className = '';
   }
 }
 
@@ -171,14 +196,6 @@ function strokewidth_range_oninput(t) {
       return strokewidth + 'px';
     })
     .attr('shape-rendering', strokewidth === 0 ? 'crispEdges' : 'auto');
-}
-
-// toggle the advanced controls
-function toggle_advanced_controls() {
-  if (advancedcontrols_div.className)
-    advancedcontrols_div.className = '';
-  else
-    advancedcontrols_div.className = 'hidden';
 }
 
 // mask rotation slider
