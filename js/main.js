@@ -154,9 +154,6 @@ function brightness_range_oninput(t) {
     .attr('fill', function(d) {
       var d3this = d3.select(this);
 
-      if (d3this.attr('disabled') === '1')
-        return;
-
       var ryb = d.data.neutrals[+d3this.attr('ring')];
       var color = RXB.stepcolor(ryb, brightness / 255, 255);
       if (isryb)
@@ -188,11 +185,6 @@ function strokewidth_range_oninput(t) {
 
   svg.selectAll('path.color-wedge')
     .attr('stroke-width', function(d) {
-      var d3this = d3.select(this);
-
-      if (d3this.attr('disabled') === '1')
-        return 0;
-
       return strokewidth + 'px';
     })
     .attr('shape-rendering', strokewidth === 0 ? 'crispEdges' : 'auto');
@@ -275,9 +267,6 @@ function toggle_ryb_rgb_button() {
   svg.selectAll('path.color-wedge')
     .attr('fill', function(d) {
       var d3this = d3.select(this);
-
-      if (d3this.attr('disabled') === '1')
-        return;
 
       var ryb = d.data.neutrals[+d3this.attr('ring')];
       var color = RXB.stepcolor(ryb, brightness / 255, 255);
@@ -400,9 +389,6 @@ function create() {
 
     function onclick() {
       var d3this = d3.select(this);
-
-      if (d3this.attr('disabled') === '1')
-        return;
 
       last_element_clicked = d3this;
 
