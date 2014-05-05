@@ -2,6 +2,9 @@
 /* globals d3, RXB */
 // defaults
 
+
+var debug = window.location.hash === '#debug';
+
 var borderwidth = 10;
 var bordercolors = [
   '#777',
@@ -128,7 +131,7 @@ function init() {
     span.innerHTML = '&#9658;';
 
     // conditionally show things
-    if (section.classList.contains('show'))
+    if (section.classList.contains('show') || debug)
       button.onclick.call(button);
   });
 
@@ -139,9 +142,6 @@ function init() {
   var foo = svg.selectAll('path.color-wedge');
   foo.on('click').call(foo[0][0]);
 
-  // optional debug stuff
-  if (window.location.hash === '#debug') {
-  }
 }
 
 // brightness slider
@@ -599,6 +599,9 @@ function apply_mask(mask) {
     .attr('d', arc)
     .attr('class', 'mask')
     .attr('stroke', maskcolor)
+    .on('mouseup', function() {
+      mousedown = false;
+    })
     //.attr('stroke-width', '5px')
     .attr('fill', function(d, i) {
       this.style.visibility = d.data ? 'hidden' : 'visible';
