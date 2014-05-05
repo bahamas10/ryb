@@ -147,6 +147,9 @@ function init() {
   var foo = svg.selectAll('path.color-wedge');
   foo.on('click').call(foo[0][0]);
 
+  // FUN
+  if (window.location.hash === '#???')
+    random_magic_colors();
 }
 
 // brightness slider
@@ -411,7 +414,7 @@ function create() {
         var d = document.createElement('div');
         var colors = neutrals[i];
         if (isryb)
-          colors = RXB.ryb2rgb(colors, brightness/255);
+          colors = RXB.ryb2rgb(colors);
         var hex = '#' + RXB.rxb2hex(colors);
         d.style.display = 'table-cell';
         d.style.backgroundColor = hex;
@@ -511,7 +514,7 @@ function download_neutrals_png() {
   for (var i = 0; i < numneutrals; i++) {
     var colors = neutrals[i];
     if (isryb)
-      colors = RXB.ryb2rgb(colors, brightness/255);
+      colors = RXB.ryb2rgb(colors);
     var hex = '#' + RXB.rxb2hex(colors);
     context.fillStyle = hex;
     context.fillRect((size * i) + (margin * (i+1)), margin, size, height);
@@ -613,4 +616,14 @@ function apply_mask(mask) {
       this.style.cursor = d.data ? 'crosshair' : 'auto';
       return d3.rgb(maskcolor);
     });
+}
+
+// meant for fun
+function random_magic_colors() {
+  for (var i in RXB.MAGIC_COLORS) {
+    for (var j = 0; j < 3; j++) {
+      RXB.MAGIC_COLORS[i][j] = Math.random();
+    }
+  }
+  create();
 }
