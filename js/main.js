@@ -59,6 +59,11 @@ function init() {
   // links should open in new tabs
   d3.selectAll('a').attr('target', 'new');
 
+  // lifting the mouseup anywhere should affect everything
+  document.onmouseup = function() {
+    mousedown = false;
+  };
+
   // get some html elements
   bordercolor_range = document.getElementById('bordercolor-range');
   borderwidth_range = document.getElementById('borderwidth-range');
