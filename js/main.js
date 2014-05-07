@@ -6,6 +6,7 @@
 var debug = window.location.hash === '#debug';
 
 var borderwidth = 10;
+var bordercolor = 0;
 var bordercolors = [
   '#777',
   '#444'
@@ -245,7 +246,7 @@ function borderwidth_range_oninput(t) {
 
 // border color slider
 function bordercolor_range_oninput(t) {
-  var bordercolor = +t.value;
+  bordercolor = +t.value;
   bordercolor_range.textContent = bordercolor;
 
   svg.select('#grad1')
@@ -316,10 +317,10 @@ function create() {
     .attr('id', 'grad1');
   grad1.append('stop')
     .attr('offset', '90%')
-    .attr('stop-color', bordercolors[0]);
+    .attr('stop-color', d3.rgb(bordercolors[0]).darker(bordercolor / 10));
   grad1.append('stop')
     .attr('offset', '100%')
-    .attr('stop-color', bordercolors[1]);
+    .attr('stop-color', d3.rgb(bordercolors[1]).darker(bordercolor / 10));
     /*
   grad1.append('stop')
     .attr('offset', '96%')
@@ -606,7 +607,7 @@ function apply_mask(mask) {
     .append('path')
     .attr('d', arc)
     .attr('class', 'mask')
-    .attr('stroke', maskcolor)
+    .attr('stroke', d3.rgb(maskcolor).darker(bordercolor / 10))
     .on('mouseup', function() {
       mousedown = false;
     })
@@ -614,7 +615,7 @@ function apply_mask(mask) {
     .attr('fill', function(d, i) {
       this.style.visibility = d.data ? 'hidden' : 'visible';
       this.style.cursor = d.data ? 'crosshair' : 'auto';
-      return d3.rgb(maskcolor);
+      return d3.rgb(maskcolor).darker(bordercolor / 10);
     });
 }
 
