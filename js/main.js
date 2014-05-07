@@ -54,6 +54,9 @@ var svg;
 // d3 elements
 var last_element_clicked;
 
+// RYB magic colors
+var RYB_MAGIC_COLORS = JSON.parse(JSON.stringify(RXB.MAGIC_COLORS));
+
 // page loaded
 window.addEventListener('load', init);
 function init() {
@@ -558,14 +561,6 @@ function apply_mask(mask) {
 
   svg.selectAll('g.mask').remove();
 
-  var pie = d3.layout.pie()
-    .sort(null)
-    .value(function(d) { return 1; });
-
-  var arc = d3.svg.arc()
-    .innerRadius(0)
-    .outerRadius(radius + 1);
-
   var data = [];
 
   // figure out what to do
@@ -596,6 +591,16 @@ function apply_mask(mask) {
       break;
   }
 
+  data = stretch(data, divisions);
+
+  var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d, i) { return 1; });
+
+  var arc = d3.svg.arc()
+    .innerRadius(0)
+    .outerRadius(radius + 1);
+
   var g = svg
     .append('g')
     .attr('transform', 'rotate(' + maskrotation + ')')
@@ -611,7 +616,6 @@ function apply_mask(mask) {
     .on('mouseup', function() {
       mousedown = false;
     })
-    //.attr('stroke-width', '5px')
     .attr('fill', function(d, i) {
       this.style.visibility = d.data ? 'hidden' : 'visible';
       this.style.cursor = d.data ? 'crosshair' : 'auto';
@@ -619,11 +623,31 @@ function apply_mask(mask) {
     });
 }
 
+// stretch an arry
+function stretch(arr, size) {
+  return arr;
+  var arrlen = arr.length;
+  var ret = [];
+  for (var i = 0; i < arrlen; i += arrlen / size)
+    ret.push(arr[Math.floor(i)]);
+  return ret;
+}
+
 // meant for fun
 function random_magic_colors() {
   for (var i in RXB.MAGIC_COLORS) {
     for (var j = 0; j < 3; j++) {
       RXB.MAGIC_COLORS[i][j] = Math.random();
+    }
+  }
+  create();
+}
+
+// revert the fun
+function revert_magic_colors() {
+  for (var i in RXB.MAGIC_COLORS) {
+    for (var j = 0; j < 3; j++) {
+      RXB.MAGIC_COLORS[i][j] = RYB_MAGIC_COLORS[i][j];
     }
   }
   create();
