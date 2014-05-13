@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+	<head>
+		<title>RYB BasicColorPicker</title>
+		<script src="js/RXB.js"></script>
+		<script src="js/BasicColorPicker.js"></script>
+		<script>
+			function init() {
+				var rybrainbowdiv = document.getElementById('ryb-rainbow');
+				var rgbrainbowdiv = document.getElementById('rgb-rainbow');
+				var opts = {
+					style: {
+						height: '1px',
+						width: '2px'
+					}
+				};
+				[rybrainbowdiv, rgbrainbowdiv].forEach(function(rainbowdiv, j) {
+					for (var i = -240; i <= 240; i+=2) {
+						var rainbowdivline = document.createElement('div');
+						rainbowdivline.style.clear = 'both';
+						opts.value = i / 255;
+						opts.rgb = j === 1;
+						BasicColorPicker.HTMLRainbow(rainbowdivline, opts);
+						rainbowdiv.appendChild(rainbowdivline);
+					}
+				});
+			}
+			window.addEventListener('load', init);
+		</script>
+		<style>
+			html {
+				height: 100%;
+			}
+			body {
+				background-color: #111;
+				color: #eee;
+				height: 100%;
+			}
+			#container {
+				background-color: #222;
+				margin-right: auto;
+				margin-left: auto;
+				width: 800px;
+				height: 100%;
+				clear: both;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<h2>RYB Rainbow</h2>
+			<div id="ryb-rainbow"></div>
+			<h2>RGB Rainbow</h2>
+			<div id="rgb-rainbow"></div>
+		</div>
+	</body>
+</html>
