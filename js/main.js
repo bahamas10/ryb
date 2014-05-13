@@ -579,6 +579,9 @@ function apply_mask(mask) {
     case 'complementary':
       data = [1, 0, 0, 1, 0, 0];
       break;
+    case 'double-complementary':
+      data = [1, 1, 0, 0, 0, 0];
+      break;
     case 'split-complementary':
       data = [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0];
       break;
@@ -587,6 +590,9 @@ function apply_mask(mask) {
       break;
     case 'square':
       data = [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0];
+      break;
+    case 'diadic':
+      data = [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       break;
     case 'triadic':
       data = [1, 0, 1, 0, 1, 0];
