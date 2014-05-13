@@ -96,7 +96,12 @@ function init() {
     d.title = hex;
     d.onclick = function() {
       strokecolor = hex;
+      maskcolor = hex;
       svg.selectAll('path.color-wedge').attr('stroke', hex);
+      svg.select('g.mask')
+        .selectAll('path')
+        .attr('fill', maskcolor)
+        .attr('stroke', maskcolor);
     };
     d.onmousedown = function() {
       mousedown = true;
@@ -264,12 +269,8 @@ function bordercolor_range_oninput(t) {
     });
   svg.select('g.mask')
     .selectAll('path')
-    .attr('fill', function(d, i) {
-      return d3.rgb(maskcolor).darker(bordercolor / 10);
-    })
-    .attr('stroke', function(d, i) {
-      return d3.rgb(maskcolor).darker(bordercolor / 10);
-    });
+    .attr('fill', maskcolor)
+    .attr('stroke', maskcolor);
 }
 
 
@@ -621,14 +622,14 @@ function apply_mask(mask) {
     .append('path')
     .attr('d', arc)
     .attr('class', 'mask')
-    .attr('stroke', d3.rgb(maskcolor).darker(bordercolor / 10))
+    .attr('stroke', maskcolor)
     .on('mouseup', function() {
       mousedown = false;
     })
     .attr('fill', function(d, i) {
       this.style.visibility = d.data ? 'hidden' : 'visible';
       this.style.cursor = d.data ? 'crosshair' : 'auto';
-      return d3.rgb(maskcolor).darker(bordercolor / 10);
+      return maskcolor;
     });
 }
 
