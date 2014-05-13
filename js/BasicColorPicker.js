@@ -5,7 +5,7 @@
 
 ;(function(global) {
   global.BasicColorPicker = BasicColorPicker;
-  BasicColorPicker.colorpicker = colorpicker;
+  BasicColorPicker.HTMLRainbow = HTMLRainbow;
 
   /**
    * Load an element with divs creating an RYB rainbow
@@ -21,19 +21,22 @@
    *
    * returns the children of the element
    */
-  function colorpicker(element, opts) {
+  function HTMLRainbow(element, opts) {
     opts = opts || {};
     opts.onclick = opts.onclick || function() {};
     opts.style = opts.style || {};
+    opts.size = opts.size || 400;
+    opts.value = opts.value || 0;
 
     element.onselectstart = function() { return false; };
 
     var mousedown = false;
-    var r = RXB.rainbow((256+256+256*2) / 3);
+    var r = RXB.rainbow(opts.size);
 
     for (var i = 0; i < r.length; i++) {
       var color = r[i];
-      var rgb = opts.rgb ? color : RXB.ryb2rgb(color);
+      var colorstepped = RXB.stepcolor(color, opts.value);
+      var rgb = opts.rgb ? colorstepped : RXB.ryb2rgb(colorstepped);
       var hex = RXB.d2h(rgb[0]) + RXB.d2h(rgb[1]) + RXB.d2h(rgb[2]);
 
       // Create and append the new element
@@ -191,7 +194,6 @@
     function _BasicColorPicker(element, opts) {
       // options
       opts = opts || {};
-      opts.step = opts.step || 5;
       opts.style = opts.style || {};
       opts.style.cursor = opts.style.cursor || 'crosshair';
       opts.onclick = pixel_onclick;
@@ -205,7 +207,7 @@
       rainbowdiv.style.height = height;
       rainbowdiv.style.clear = 'both';
       rainbowdiv.style.border = '1px solid #ddd';
-      pixels = colorpicker(rainbowdiv, opts);
+      pixels = HTMLRainbow(rainbowdiv, opts);
       element.appendChild(rainbowdiv);
       // the calculated width of the rainbow table
       var width = +(opts.style.width || '1px').replace(/[^0-9]/g, '') * pixels.length + 2;

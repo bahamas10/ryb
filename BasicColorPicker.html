@@ -1,4 +1,4 @@
-
+<!doctype html>
 <html>
 	<head>
 		<title>RYB BasicColorPicker</title>
@@ -13,16 +13,27 @@
 		<style>
 			body {
 				background-color: #111;
-			}
-			#color-picker {
 				color: #eee;
-				border: 2px solid #ccc;
-				width: 500px;
-				padding: 10px;
+			}
+			#container {
+				background-color: #222;
+				margin-right: auto;
+				margin-left: auto;
+				width: 800px;
+				height: 100%;
+			}
+
+			#color-picker {
+				padding: 5px;
+				border: 1px solid #ccc;
+				background-color: #111;
 			}
 		</style>
 	</head>
 	<body>
-		<div id="color-picker"></div>
+		<div id="container">
+			<h2>Basic Color Picker</h2>
+			<div id="color-picker"></div>
+		</div>
 	</body>
 </html>

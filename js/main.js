@@ -177,7 +177,12 @@ function brightness_range_oninput(t) {
 
 // num divisions slider
 function divisions_range_oninput(t) {
-  divisions = +t.value;
+  var val = +t.value;
+  switch (val) {
+    case 1: divisions = 3; break;
+    case 2: divisions = 6; break;
+    default: divisions = 12 * (val - 2); break;
+  }
   divisions_range.textContent = divisions;
 
   create();
@@ -591,8 +596,6 @@ function apply_mask(mask) {
       break;
   }
 
-  data = stretch(data, divisions);
-
   var pie = d3.layout.pie()
     .sort(null)
     .value(function(d, i) { return 1; });
@@ -621,16 +624,6 @@ function apply_mask(mask) {
       this.style.cursor = d.data ? 'crosshair' : 'auto';
       return d3.rgb(maskcolor).darker(bordercolor / 10);
     });
-}
-
-// stretch an arry
-function stretch(arr, size) {
-  return arr;
-  var arrlen = arr.length;
-  var ret = [];
-  for (var i = 0; i < arrlen; i += arrlen / size)
-    ret.push(arr[Math.floor(i)]);
-  return ret;
 }
 
 // meant for fun

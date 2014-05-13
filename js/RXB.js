@@ -101,8 +101,8 @@
   }
 
   /**
-   * Given a RYB array and value, calculate
-   * the actual RYB values
+   * Given an RXB array and value, calculate
+   * the actual values by darkening or lightening the color
    *
    * @param hex    {array} an array or hex string of an RYB value
    * @param value  {float} a number -1>=value<=1 representing the value to step the color
@@ -110,30 +110,28 @@
    */
   function stepcolor(hex, value, limit) {
     limit = limit || 255;
-    var ryb = typeof hex === 'string' ? hex2rxb(hex) : hex;
+    var rxb = typeof hex === 'string' ? hex2rxb(hex) : hex;
 
-    var r = ryb[0];
-    var y = ryb[1];
-    var b = ryb[2];
+    var r = rxb[0];
+    var x = rxb[1];
+    var b = rxb[2];
 
+    var stepR, stepX, stepB;
     if (value > 0) {
-      var stepupr = (limit - r) / limit;
-      var stepupy = (limit - y) / limit;
-      var stepupb = (limit - b) / limit;
-
-      r += stepupr * value * limit;
-      y += stepupy * value * limit;
-      b += stepupb * value * limit;
+      stepR = (limit - r) / limit;
+      stepX = (limit - x) / limit;
+      stepB = (limit - b) / limit;
     } else {
-      var stepdownr = r / limit;
-      var stepdowny = y / limit;
-      var stepdownb = b / limit;
-
-      r += stepdownr * value * limit;
-      y += stepdowny * value * limit;
-      b += stepdownb * value * limit;
+      stepR = r / limit;
+      stepX = x / limit;
+      stepB = b / limit;
     }
-    return [clamp(r), clamp(y), clamp(b)];
+
+    r += stepR * value * limit;
+    x += stepX * value * limit;
+    b += stepB * value * limit;
+
+    return [clamp(r), clamp(x), clamp(b)];
   }
 
   /**
