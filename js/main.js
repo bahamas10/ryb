@@ -273,15 +273,42 @@ function bordercolor_range_oninput(t) {
     .attr('stroke', maskcolor);
 }
 
+function disable_ryb_interpolation() {
+  var title = 'RGB Color Picker';
+  document.title = title;
+  title_h1.textContent = title;
 
-// toggle ryb rgb button
-function toggle_ryb_rgb_button() {
-  isryb = !isryb;
+  isryb = false;
 
-  document.title = (isryb ? 'RYB' : 'RGB') + ' Color Picker';
-  title_h1.textContent = '- ' + (isryb ? 'ryb' : 'rgb') + ' -';
+  colorize();
+}
 
-  // figure out the background color
+function enable_ryb_interpolation() {
+  var title = 'RYB Color Picker';
+  document.title = title;
+  title_h1.textContent = title;
+
+  // revert the magic colors
+  revert_magic_colors();
+
+  isryb = true;
+
+  colorize();
+}
+
+function enable_custom_interpolation() {
+  var title = 'RXB Color Picker';
+  document.title = title;
+  title_h1.textContent = title;
+
+  random_magic_colors();
+
+  isryb = true;
+
+  colorize();
+}
+
+function colorize() {
   svg.selectAll('path.color-wedge')
     .attr('fill', function(d) {
       var d3this = d3.select(this);
@@ -640,7 +667,6 @@ function random_magic_colors() {
       RXB.MAGIC_COLORS[i][j] = Math.random();
     }
   }
-  create();
 }
 
 // revert the fun
@@ -650,5 +676,4 @@ function revert_magic_colors() {
       RXB.MAGIC_COLORS[i][j] = RYB_MAGIC_COLORS[i][j];
     }
   }
-  create();
 }

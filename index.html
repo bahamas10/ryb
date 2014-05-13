@@ -22,7 +22,18 @@ RXB Library License: MIT
 		<div id="content">
 		</div>
 		<div id="sidebar">
-			<h1 id="title">- ryb -</h1>
+			<h1 id="title">RYB Color Picker</h1>
+			<div class="accordion-section">
+				<button>Interpolation</button>
+				<div class="content" id="interpolation-content">
+					<form action="">
+						<label><input name="1" type="radio" onchange="disable_ryb_interpolation();" title="Disable RYB Interpolation" />None (RGB)</label><br />
+						<label><input name="1" type="radio" onchange="enable_ryb_interpolation()" title="Enable RYB Interpolation" />RYB</label><br />
+						<label><input name="1" type="radio" onchange="enable_custom_interpolation()" title="Enable Custom Interpolation" />Custom</label><br />
+					</form>
+					<button onclick="random_magic_colors(); colorize();" title="Generate random Magic Colors">Randomize</button>
+				</div>
+			</div>
 			<div class="accordion-section show">
 				<button>Color Preview</button>
 				<div class="content">
@@ -68,6 +79,7 @@ RXB Library License: MIT
 					<p>
 						Stroke Color
 						<div id="stroke-color-previews"></div>
+						<span class="value">also changes color harmonies mask colors</span>
 					</p>
 					<p>
 						Stroke Width
@@ -137,16 +149,6 @@ RXB Library License: MIT
 					</p>
 				</div>
 			</div>
-			<div class="accordion-section">
-				<button>Interpolation</button>
-				<div class="content">
-					<button onclick="random_magic_colors();" title="Generate random Magic Colors">Randomize</button>
-					<button onclick="revert_magic_colors();" title="Revert to RYB interpolation points">Revert</button>
-				</div>
-			</div>
-			<p>
-				<button onclick="toggle_ryb_rgb_button();" title="Toggle RYB/RGB mode">RYB vs RGB</button>
-			</p>
 			<p class="info">
 				<a href="about.html">More Info</a> |
 				<a href="BasicColorPicker.html">Basic Color Picker</a> |

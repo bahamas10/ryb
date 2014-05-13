@@ -138,6 +138,16 @@ button.circle:hover {
 	margin: 3px 20px;
 }
 
+#interpolation-content {
+	text-align: left;
+	font-size: 12px;
+	padding: 0 10px;
+}
+#interpolation-content input[type="radio"] {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
 /* color preview as a big div */
 #color-preview {
 	margin-right: auto;
