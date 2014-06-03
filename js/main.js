@@ -19,6 +19,7 @@ var lastmasktype = '';
 var margin = borderwidth + 10;
 var maskcolor = '#333';
 var maskrotation = 0;
+var maskspread = 0;
 var mousedown = false;
 var numneutrals = 9;
 var radius = 400;
@@ -38,6 +39,8 @@ var colorpreviewneutrals_div;
 var colorpreviewrgb_input;
 var divisions_range;
 var divisionvariance_range;
+var maskspread_range;
+var maskspread_range_text;
 var maskrotation_range;
 var maskrotation_range_text;
 var prefix_input;
@@ -79,6 +82,8 @@ function init() {
   divisionvariance_range = document.getElementById('divisionvariance-range');
   maskrotation_range = document.getElementById('maskrotation-range');
   maskrotation_range_text = document.getElementById('maskrotation-range-text');
+  maskspread_range = document.getElementById('maskspread-range');
+  maskspread_range_text = document.getElementById('maskspread-range-text');
   prefix_input = document.getElementById('prefix');
   rings_range = document.getElementById('rings-range');
   ringvariance_range = document.getElementById('ringvariance-range');
@@ -197,6 +202,7 @@ function divisions_range_oninput(t) {
 function rings_range_oninput(t) {
   rings = +t.value;
   rings_range.textContent = rings;
+
   create();
 }
 
@@ -219,6 +225,14 @@ function maskrotation_range_oninput(t) {
 
   svg.selectAll('g.mask')
     .attr('transform', 'rotate(' + maskrotation + ')');
+}
+
+// mask spread slider
+function maskspread_range_oninput(t) {
+  maskspread = +t.value;
+  maskspread_range_text.textContent = maskspread;
+
+  apply_mask(lastmasktype);
 }
 
 // rotation slider
@@ -479,6 +493,7 @@ function create() {
       }
     }
   }
+
   apply_mask(lastmasktype);
 }
 
@@ -632,7 +647,9 @@ function apply_mask(mask) {
 
   var pie = d3.layout.pie()
     .sort(null)
-    .value(function(d, i) { return 1; });
+    .value(function(d, i) {
+      return 1 + (d * maskspread / 10);
+    });
 
   var arc = d3.svg.arc()
     .innerRadius(0)
