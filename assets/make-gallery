@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+/**
+ * easily generate a gallery file from mant
+ */
+
+var http = require('http');
+var path = require('path');
+
+var baseuri = 'http://us-east.manta.joyent.com/bahamas10/public/ryb';
+
+var arr = [];
+http.get(baseuri, function(res) {
+  var data = '';
+  res.setEncoding('utf-8');
+  res.on('data', function(d) {
+    data += d;
+  });
+  res.on('end', function() {
+    var s = data.trim().split('\n');
+    s.forEach(function(line) {
+      var name = JSON.parse(line).name;
+      var uri = baseuri + '/' + name;
+      arr.push(uri);
+    });
+
+    console.log('var gallery = ' + JSON.stringify(arr, null, 2) + ';');
+  });
+});
+

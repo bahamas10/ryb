@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>RYB Gallery</title>
+		<link href="css/style.css" rel="stylesheet">
+		<script type="text/javascript" src="./assets/gallery.js"></script>
+		<style>
+			p, h1, h2, h3, h4, h5, h6, img {
+				margin: 15px;
+			}
+			h1, h2, h3, h4, h5, h6 {
+				color: #fd7;
+			}
+			h1 {
+				border-bottom: 1px dashed gray;
+			}
+			#link-back {
+				position: fixed;
+				left: 10px;
+				top: 10px;
+			}
+			#container {
+				width: 850px;
+				margin-right: auto;
+				margin-left: auto;
+			}
+			img {
+				max-width: 850px;
+			}
+		</style>
+		<script>
+			window.addEventListener('load', function() {
+				var g = document.getElementById('gallery');
+				for (var i = 0; i < gallery.length; i++) {
+					var img = document.createElement('img');
+					img.src = gallery[i];
+					g.appendChild(img);
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="container">
+			<h1>RYB Gallery</h1>
+			<div id="gallery"></div>
+		</div>
+		<a href="/" id="link-back">&larr; Color Wheel</a>
+	</body>
+</html>

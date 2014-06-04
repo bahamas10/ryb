@@ -1,9 +1,23 @@
 <html>
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-		<title>RYB Color Picker</title>
+		<title>RYB Color Wheel Information</title>
 		<link href="css/style.css" rel="stylesheet">
 		<style>
+			p, h1, h2, h3, h4, h5, h6, img {
+				margin: 15px;
+			}
+			h1, h2, h3, h4, h5, h6 {
+				color: #fd7;
+			}
+			h1 {
+				border-bottom: 1px dashed gray;
+			}
+			#link-back {
+				position: fixed;
+				left: 10px;
+				top: 10px;
+			}
 			#container {
 				width: 850px;
 				margin-right: auto;
@@ -13,7 +27,35 @@
 	</head>
 	<body>
 		<div id="container">
-			hello
+			<h1>Computer and Printing Color Models</h1>
+			<p>
+				RGB, or red, green, and blue, are the primary colors of your computer, or more accurately your monitor.
+				The <a href="https://en.wikipedia.org/wiki/Rgb">RGB color model</a> is an additive color model where red, greed, and blue lights are added together to
+				create different colors.  All colors added together (<code>#ffffff</code>, or 100% red, 100% green, and 100% blue) will result in white.
+			</p>
+			<p>
+				The <a href="https://en.wikipedia.org/wiki/CMYK_color_model">CMYK color model</a>, by contrast, is a subtractive color model
+				using 3 colors, cyan, magenta, and yellow, and a 4th value for black.  All colors added together, because it is a subtractive color model,
+				will result in black.  K, or black, is added for printing, as it easier (and cheaper) to attain a true black by not mixing all three other inks together.
+			</p>
+
+			<h1>The RYB Color Model</h1>
+			<p>
+				The <a href="https://en.wikipedia.org/wiki/RYB_color_model">RYB color wheel</a> uses red, yellow, and blue as the primary colors.
+			</p>
+			<h2>RYB vs RGB</h2>
+			<p>
+			Which one looks better?
+			</p>
+			<img src="/assets/ryb-wheel.png" alt="RYB" />
+			<img src="/assets/rgb-wheel.png" alt="RGB" />
+
+			<h1>How</h1>
+			<p>
+				See this paper on RYB interpolation <a href="/assets/ryb.pdf">ryb.pdf</a>
+			</p>
+			<img src="/assets/magic-colors.png" alt="Magic Colors" />
 		</div>
+		<a href="/" id="link-back">&larr; Color Wheel</a>
 	</body>
 </html>
