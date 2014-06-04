@@ -288,7 +288,7 @@ function bordercolor_range_oninput(t) {
 }
 
 function disable_ryb_interpolation() {
-  var title = 'RGB Color Picker';
+  var title = 'RGB Color Wheel';
   document.title = title;
   title_h1.textContent = title;
 
@@ -298,7 +298,7 @@ function disable_ryb_interpolation() {
 }
 
 function enable_ryb_interpolation() {
-  var title = 'RYB Color Picker';
+  var title = 'RYB Color Wheel';
   document.title = title;
   title_h1.textContent = title;
 
@@ -311,7 +311,7 @@ function enable_ryb_interpolation() {
 }
 
 function enable_custom_interpolation() {
-  var title = 'RXB Color Picker';
+  var title = 'RXB Color Wheel';
   document.title = title;
   title_h1.textContent = title;
 
