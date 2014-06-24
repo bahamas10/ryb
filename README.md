@@ -5,6 +5,8 @@ RYB
 
 ![color wheel](/assets/ryb-wheel.png)
 
+[More Information](http://bahamas10.github.io/ryb/about.html)
+
 License
 -------
 
