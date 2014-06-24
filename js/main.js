@@ -1,5 +1,5 @@
 /* jshint browser: true */
-/* globals d3, RXB */
+/* globals d3, RXB, alert */
 // defaults
 
 
@@ -596,7 +596,7 @@ function get_file_name() {
     'rot' + rotation,
     'dv' + divisionvariance,
     'rv' + ringvariance,
-    isryb ? 'ryb' : 'rgb',
+    document.title.substr(0, 3).toLowerCase()
   ].join('-');
   if (prefix_input.value)
     s = prefix_input.value + '-' + s;
@@ -648,6 +648,14 @@ function apply_mask(mask) {
   var pie = d3.layout.pie()
     .sort(null)
     .value(function(d, i) {
+      /*
+      if (d) {
+        var a = maskspread * divisions / data.length / 10;
+        return 1 + a;
+      }
+
+      return 1;
+      */
       return 1 + (d * maskspread / 10);
     });
 
