@@ -14,7 +14,7 @@ var bordercolors = [
 var brightness = 0;
 var divisions = 12;
 var divisionvariance = 1;
-var isryb = true;
+var isinterpolated = true;
 var lastmasktype = '';
 var margin = borderwidth + 10;
 var maskcolor = '#333';
@@ -44,6 +44,7 @@ var maskspread_range_text;
 var maskrotation_range;
 var maskrotation_range_text;
 var prefix_input;
+var randomize_button;
 var rings_range;
 var ringvariance_range;
 var rotation_range;
@@ -85,6 +86,7 @@ function init() {
   maskspread_range = document.getElementById('maskspread-range');
   maskspread_range_text = document.getElementById('maskspread-range-text');
   prefix_input = document.getElementById('prefix');
+  randomize_button = document.getElementById('randomize-button');
   rings_range = document.getElementById('rings-range');
   ringvariance_range = document.getElementById('ringvariance-range');
   rotation_range = document.getElementById('rotation-range');
@@ -161,6 +163,9 @@ function init() {
   var foo = svg.selectAll('path.color-wedge');
   foo.on('click').call(foo[0][0]);
 
+  // disable randomize button initally
+  randomize_button.disabled = true;
+
   // FUN
   if (window.location.hash === '#???')
     random_magic_colors();
@@ -178,7 +183,7 @@ function brightness_range_oninput(t) {
 
       var ryb = d.data.neutrals[+d3this.attr('ring')];
       var color = RXB.stepcolor(ryb, brightness / 255, 255);
-      if (isryb)
+      if (isinterpolated)
         return d3.rgb.apply(d3, RXB.ryb2rgb(color));
       else
         return d3.rgb.apply(d3, color);
@@ -292,7 +297,9 @@ function disable_ryb_interpolation() {
   document.title = title;
   title_h1.textContent = title;
 
-  isryb = false;
+  randomize_button.disabled = true;
+
+  isinterpolated = false;
 
   colorize();
 }
@@ -304,8 +311,9 @@ function enable_ryb_interpolation() {
 
   // revert the magic colors
   revert_magic_colors();
+  randomize_button.disabled = true;
 
-  isryb = true;
+  isinterpolated = true;
 
   colorize();
 }
@@ -316,8 +324,9 @@ function enable_custom_interpolation() {
   title_h1.textContent = title;
 
   random_magic_colors();
+  randomize_button.disabled = false;
 
-  isryb = true;
+  isinterpolated = true;
 
   colorize();
 }
@@ -329,7 +338,7 @@ function colorize() {
 
       var ryb = d.data.neutrals[+d3this.attr('ring')];
       var color = RXB.stepcolor(ryb, brightness / 255, 255);
-      if (isryb)
+      if (isinterpolated)
         return d3.rgb.apply(d3, RXB.ryb2rgb(color));
       else
         return d3.rgb.apply(d3, color);
@@ -427,7 +436,7 @@ function create() {
         d3this.attr('division', j);
         var ryb = d.data.neutrals[i];
         var color = RXB.stepcolor(ryb, brightness / 255, 255);
-        if (isryb)
+        if (isinterpolated)
           return d3.rgb.apply(d3, RXB.ryb2rgb(color));
         else
           return d3.rgb.apply(d3, color);
@@ -464,7 +473,7 @@ function create() {
       for (var i = 0; i < numneutrals; i++) {
         var d = document.createElement('div');
         var colors = neutrals[i];
-        if (isryb)
+        if (isinterpolated)
           colors = RXB.ryb2rgb(colors);
         var hex = '#' + RXB.rxb2hex(colors);
         d.style.display = 'table-cell';
@@ -565,7 +574,7 @@ function download_neutrals_png() {
   // neutrals
   for (var i = 0; i < numneutrals; i++) {
     var colors = neutrals[i];
-    if (isryb)
+    if (isinterpolated)
       colors = RXB.ryb2rgb(colors);
     var hex = '#' + RXB.rxb2hex(colors);
     context.fillStyle = hex;

@@ -41,20 +41,38 @@
 
 			<h1>The RYB Color Model</h1>
 			<p>
-				The <a href="https://en.wikipedia.org/wiki/RYB_color_model">RYB color wheel</a> uses red, yellow, and blue as the primary colors.
+				The <a href="https://en.wikipedia.org/wiki/RYB_color_model">RYB color wheel</a> uses red, yellow, and blue as the primary colors.  This is the color model
+				that is used for the <a href="./">RYB Color Picker</a>.  For details on how this model is rendered on the computer, so the <a href="#how">How</a> section below.
 			</p>
 			<h2>RYB vs RGB</h2>
 			<p>
-			Which one looks better?
+			Which one looks better?  The image on the right is a color wheel generated from the RGB color space, whereas the image on the left is run through the converter from RYB to RGB.
 			</p>
 			<img src="assets/ryb-wheel.png" alt="RYB" />
 			<img src="assets/rgb-wheel.png" alt="RGB" />
 
-			<h1>How</h1>
+			<h1 id="how">How</h1>
 			<p>
-				See this paper on RYB interpolation <a href="assets/ryb.pdf">ryb.pdf</a>
+				Colors on a computer are typical seen as hex, such as <code>#ff00ff</code> which represnts purple;  Hex is used here a way of encoding RGB data (as explained above).
+				To convert this to RYB, a conversion is done that may seem counter intuitive.  The color <code>#00ff00</code>, which represents 0% red, 100% green, and 0% blue in the
+				RGB color space (green) becomes the color <code>#ff00ff</code>, which represents 0% red, 100% yellow, 0% blue in the RYB color space (yellow).  We then, must convert that
+				color, as it is given in RYB, to RGB.
+			</p>
+			<p>
+				The conversion algorithm can be seen in <a href="https://github.com/bahamas10/ryb/blob/gh-pages/js/RXB.js#L252-L330">these lines of code</a>, and is also summed up in in this paper,
+				<a href="assets/ryb.pdf">ryb.pdf</a> by Dr. Nathan Gossett and Dr. Baoquan Chen of the <a href="http://umn.edu">University of Minnesota at Twin Cities</a>
+			</p>
+			<p>
+				The image below shows the "Magic Colors" from the ryb2rgb algorithm in the above source code.
 			</p>
 			<img src="assets/magic-colors.png" alt="Magic Colors" />
+			<h1>About</h1>
+			<ul>
+				<li>The conversion algorithm can be seen in <a href="https://github.com/bahamas10/ryb/blob/gh-pages/js/RXB.js#L252-L330">these lines of code</a></li>
+				<li>A paper on ryb color space mixing <a href="assets/ryb.pdf">ryb.pdf</a> by Dr. Nathan Gossett and Dr. Baoquan Chen of the <a href="http://umn.edu">University of Minnesota at Twin Cities</a></li>
+				<li><a href="https://github.com/bahamas10/ryb">Hosted on GitHub</a> - &copy; <a href="http://www.daveeddy.com">bahamas10</a> - MIT License</li>
+			</ul>
+			<br /><br />
 		</div>
 		<a href="./" id="link-back">&larr; Color Wheel</a>
 	</body>
