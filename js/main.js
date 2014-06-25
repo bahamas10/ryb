@@ -65,7 +65,7 @@ var RYB_MAGIC_COLORS = JSON.parse(JSON.stringify(RXB.MAGIC_COLORS));
 window.addEventListener('load', init);
 function init() {
   // links should open in new tabs
-  d3.selectAll('a').attr('target', 'new');
+  d3.selectAll('a').attr('target', '_blank');
 
   // lifting the mouseup anywhere should affect everything
   document.onmouseup = function() {
