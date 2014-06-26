@@ -1,6 +1,8 @@
 RYB
 ===
 
+RYB Color wheel generated programmatically in HTML/JavaScript and d3.js
+
 [RYB Color Wheel](http://bahamas10.github.io/ryb)
 
 ![color wheel](/assets/ryb-wheel.png)
