@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * easily generate a gallery file from mant
+ * generate a gallery file from manta
  */
 
 var http = require('http');

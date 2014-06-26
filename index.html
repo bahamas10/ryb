@@ -30,7 +30,7 @@ RXB Library License: MIT
 						<input id="color-preview-rgb" onclick="this.setSelectionRange(0, this.value.length);" value="#9c744a" />
 						<div id="color-preview"></div>
 						<div id="color-preview-neutrals"></div>
-						<button onclick="random_click()" class="circle" title="Randomly select a color from the current color wheel">?</button>
+						<button onclick="random_click()" class="circle" title="Randomly select a color from the current color wheel"><img style="height: 9px;" src="assets/shuf.png" alt="shuffle" /></button>
 						<button onclick="numneutrals = Math.max(--numneutrals, 2); redo_last_click()" class="circle" title="Reduce number of neutrals to display">-</button>
 						<button onclick="numneutrals = Math.min(++numneutrals, 15); redo_last_click();" class="circle" title="Increase number of neutrals to display">+</button>
 						<button onclick="download_neutrals_png()" class="circle" title="Download a PNG rendering of the current neutral swatch">&darr;</button>
