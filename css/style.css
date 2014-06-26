@@ -70,13 +70,18 @@ button.circle:hover {
 
 /* left-hand side... this is where the svg goes */
 #content {
-	margin-right: 300px;
+	position: absolute;
+	left: 0;
+	right: 300px;
+	top: 0;
+	bottom: 0;
 	text-align: center;
 }
 
 /* buttons to download the png/svg of the wheel */
 #download-buttons {
 	position: absolute;
+	z-index: 1;
 	bottom: 0;
 	right: 300px;
 	margin: 10px;

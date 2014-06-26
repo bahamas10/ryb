@@ -131,7 +131,7 @@ function init() {
     var maxHeight = content.offsetHeight + 'px';
 
     var span = document.createElement('span');
-    span.style.float = 'left';
+    span.style.cssFloat = 'left';
     span.style.marginRight = '10px';
     button.appendChild(span);
 
@@ -159,16 +159,16 @@ function init() {
   // make the color wheel
   create();
 
-  // initial color
-  var foo = svg.selectAll('path.color-wedge');
-  foo.on('click').call(foo[0][0]);
-
   // disable randomize button initally
   randomize_button.disabled = true;
 
   // FUN
   if (window.location.hash === '#???')
     random_magic_colors();
+
+  // initial color
+  var foo = svg.selectAll('path.color-wedge');
+  foo.on('click').call(foo[0][0]);
 }
 
 // brightness slider
