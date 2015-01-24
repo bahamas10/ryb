@@ -86,8 +86,8 @@ function makeryb() {
   ctx2.putImageData(imgdata, 0, 0);
 
   canvasimg.src = canvas2.toDataURL();
-  canvasimg.height = canvas1.width;
-  canvasimg.width = canvas1.height;
+  canvasimg.height = canvas1.height;
+  canvasimg.width = canvas1.width;
 }
 
 function random_magic_colors() {
